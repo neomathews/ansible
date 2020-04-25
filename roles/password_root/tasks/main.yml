@@ -1,0 +1,41 @@
+---
+# Variable setup.
+- name: Include user_name specific variables
+  include_vars: "{{ user_name }}.yml"
+
+- name: length of root password hash
+  shell: "/bin/grep root /etc/shadow | /bin/awk -F ':' '{print $2}'"
+  register: root_password_hash
+  ignore_errors: True
+  check_mode: no
+  changed_when:
+    - root_password_hash.rc == 100
+
+- name: Set password using md5
+  user:
+    createhome:      no
+    name:            "{{ user_name }}"
+    password:        "{{ password|password_hash('md5') }}"
+    state:           present
+    update_password: always
+  no_log: True
+  when:
+    - root_password_hash.stdout|length == 34
+    - password != '!!'
+
+- name: Set password using sha512
+  user:
+    createhome:      no
+    name:            "{{ user_name }}"
+    password:        "{{ password|password_hash('sha512') }}"
+    state:           present
+    update_password: always
+  no_log: True
+  when:
+    - root_password_hash.stdout|length > 34
+    - password != '!!'
+
+- name: lock the account
+  command: "/usr/bin/passwd -l {{ user_name }}"
+  when:
+    - password == '!!'

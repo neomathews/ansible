@@ -1,0 +1,18 @@
+---
+- name: systemd restart tmp.mount
+  become: yes
+  systemd:
+      name: tmp.mount
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: reloaded
+
+- name: systemd restart vartmp.mount
+  become: yes
+  systemd:
+      name: var-tmp.mount
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: reloaded
