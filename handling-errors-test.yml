@@ -1,0 +1,13 @@
+---
+- hosts: grupo2
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: latest
+      ignore_errors: true
+      register: instalacion
+  
+    - debug: var=instalacion
+... 

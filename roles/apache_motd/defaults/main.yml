@@ -1,0 +1,6 @@
+---
+server_admin: usuario@localhost
+web_root: "/var/www/html"
+curso: "ansible patata"
+instructor: "Fidel Valero"
+...

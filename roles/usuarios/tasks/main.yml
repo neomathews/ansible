@@ -1,0 +1,28 @@
+---
+- name: include
+  include_tasks: b.yml
+
+- name: creando grupos
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - grupoA
+    - grupoB
+
+- name: Creando usuarios de la variable grupoA
+  user:
+    name: "{{ item }}"
+    state: present
+    groups: grupoA
+  with_items:
+    - "{{ grupoA }}"
+
+- name: Creando usuarios de la variable grupoA
+  user:
+    name: "{{ item }}"
+    state: present
+    groups: grupoB
+  with_items:
+    - "{{ grupoB }}"
+...

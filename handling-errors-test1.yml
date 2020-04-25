@@ -1,0 +1,26 @@
+---
+- hosts: grupo2
+  become: true
+  tasks:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: latest
+      ignore_errors: true
+      register: instalacion
+
+    - debug: var=instalacion
+
+    - name: create index
+      copy:
+        content: "hola , este es el server {{ ansible_hostname }}"
+        dest: /var/www/html/errors.html
+      when: instalacion.rc == 0
+      notify: restart apache
+
+  handlers:
+    - name: restart apache
+      systemd:
+        name: httpd
+        state: restarted
+... 

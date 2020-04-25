@@ -1,0 +1,7 @@
+---
+- hosts: centos-ansible03.local
+  become: true
+  #force_handlers: true
+  roles:
+    - apache_motd
+...

@@ -1,0 +1,9 @@
+---
+- name: creando grupos
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - grupoH
+    - grupoJ
+...

@@ -1,0 +1,30 @@
+---
+- hosts: grupo2
+  become: true
+  tasks:
+    - block:
+      - name: Crear archivo
+        shell: touch /rot/11.txt
+      
+      rescue:  
+      - name: Crear archivo rescue
+        shell: touch /root/22.txt
+
+      always:
+      - name: crear archivo si o si
+        shell: touch /root/ABC.txt
+
+
+    - block:
+      - name: Crear archivo 11
+        shell: touch /rot/333.txt
+      
+      rescue:  
+      - name: Crear archivo 22
+        shell: touch /root/222.txt
+
+      always:
+      - name: crear archivo si o si
+        shell: touch /root/DBC.txt
+
+...

@@ -1,0 +1,6 @@
+---
+- hosts: grupo2
+  become: true
+  roles: 
+  - name: officel.httpd
+...

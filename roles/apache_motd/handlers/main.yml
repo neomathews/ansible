@@ -1,0 +1,6 @@
+---
+- name: service restart
+  systemd: 
+    name: httpd
+    state: restarted
+...

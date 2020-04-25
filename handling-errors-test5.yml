@@ -1,0 +1,84 @@
+---
+- hosts: grupo2
+  become: true
+  tasks:
+    - block:
+      - name: install httpd
+        yum:
+          name: httpdAAAA
+          state: latest
+        register: instalacion
+
+      - debug: var=instalacion
+
+      - name: notificar si se instalo
+        shell: echo " "
+        notify: instalacion_si
+
+      rescue:
+      - name: recue
+        shell: echo ""
+        notify: install_fail
+
+    - block:
+      - name: servicio
+        systemd:
+          name: httpdAAAA
+          state: started
+          enabled: true
+        register: servicio
+
+      - name: debug
+        debug:
+          var: servicio
+
+      - name: notificar
+        shell: echo ""
+        notify: service_start
+
+      rescue:
+      - name: rescue
+        shell: echo " "
+        notify: service_fail
+
+    - block:
+      - name: instalacion y servicio ok
+        shell: echo " "
+        notify: ambos_ok
+        when: "not instalacion|failed and 'state' in servicio"
+
+      - name: instalacion y servicios no
+        shell: echo " "
+        notify: ambos_no
+        when: "instalacion|failed and 'state' not in servicio"
+
+  handlers:
+    - name: ambos_ok
+      debug:
+        msg: "INSTALACION Y SERVICIOS OK"
+
+    - name: ambos_no
+      debug:
+        msg: "instalacion y servicios fail"
+
+    - name: restart apache
+      systemd:
+        name: httpd
+        state: restarted
+
+    - name: install_fail
+      debug:
+        msg: "Instalacion Fallo - Intenta Nuevamente"
+
+    - name: instalacion_si
+      debug:
+        msg: "Instalacion con exito"
+
+    - name: service_start
+      debug:
+        msg: "Servicio inicio"
+
+    - name: service_fail
+      debug:
+        msg: "Servicio NO inicio"
+... 

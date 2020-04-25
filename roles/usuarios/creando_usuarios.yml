@@ -1,0 +1,7 @@
+---
+- name: playbook, creando usuarios
+  hosts: grupo2
+  become: true
+  roles: 
+    - usuarios
+...

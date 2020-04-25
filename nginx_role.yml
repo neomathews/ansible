@@ -1,0 +1,3 @@
+---
+- src: /home/neomathews/practicando_a_fondo/nginx_base.tar.gz
+  name: nginx_base

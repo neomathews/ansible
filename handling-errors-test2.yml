@@ -1,0 +1,36 @@
+---
+- hosts: grupo2
+  become: true
+  tasks:
+    - block:
+      - name: install httpd
+        yum:
+          name: httpdAAAA
+          state: latest
+#        ignore_errors: true
+        register: instalacion
+
+      - debug: var=instalacion
+
+      rescue:
+      - name: recue
+        shell: echo ""
+        notify: install_fail
+    
+      - name: create index
+        copy:
+          content: "hola , este es el server {{ ansible_hostname }}"
+          dest: /var/www/html/errors.html
+        when: "not instalacion | failed"
+        notify: restart apache
+
+  handlers:
+    - name: restart apache
+      systemd:
+        name: httpd
+        state: restarted
+
+    - name: install_fail
+      debug:
+        msg: "Instalacion Fallo - Intenta Nuevamente"
+... 

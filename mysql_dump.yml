@@ -1,0 +1,6 @@
+---
+- hosts: mysql_backup
+  become: true
+  roles: 
+    - mysql_dump
+...

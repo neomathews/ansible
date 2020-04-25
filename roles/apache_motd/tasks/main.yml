@@ -1,0 +1,38 @@
+---
+- name: instalando http
+  yum:
+    name: httpd
+    state: latest
+
+- name: iniciando {{ srv }}
+  systemd:
+    name: "{{ srv }}"
+    state: started
+    enabled: true
+
+- name: Abriendo {{ fw }}
+  firewalld:
+    service: "{{ fw_srv }}"
+    immediate: true
+    permanent: true
+    state: enabled
+
+- name: copiando tampleates para http
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+
+- name: motd ssh
+  template:
+    src: motd.j2
+    dest: /etc/motd
+
+- name: copiar archivo
+  copy:
+    src: prueba_1.txt
+    dest: /home/neomathews/OK.txt
+
+- name: reiniciando servicio
+  shell: echo ""
+  notify: service restart
+...
